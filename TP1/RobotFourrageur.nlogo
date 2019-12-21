@@ -1,4 +1,232 @@
+﻿; exemple des robots fourrageurs
+; Copyright 2018 by Eric Gouardères
 
+; This model was inspired from Ants Model of Uri Wilensky
+; see the copyright notice below.
+
+globals [
+
+  couleur-vaisseau         ;; couleur des patchs vaisseau
+  couleur-minerai          ;; couleur des patchs source de minerai
+  couleur-label-minerai-1  ;; couleur label source minerai 1
+  couleur-label-minerai-2  ;; couleur label source minerai 2
+  couleur-label-minerai-3  ;; couleur label source minerai 3
+  couleur-obstacle         ;; couleur des patchs obstacles
+  couleur-marque           ;; base couleur des patchs avec marque
+  couleur-robot-vide       ;; couleur robot qui ne porte pas de minerai
+  couleur-robot-plein      ;; couleur robot portant du minerai
+]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Propriétés des agents                                           ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+patches-own [
+
+***A COMPLETER
+
+]
+
+turtles-own [
+
+***A COMPLETER
+
+]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Setup procedures                                                ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+to setup
+  clear-all
+  setup-colors
+  setup-turtles
+  setup-patches
+end
+
+to setup-colors
+  set couleur-vaisseau violet
+  set couleur-minerai yellow
+  set couleur-label-minerai-1 red
+  set couleur-label-minerai-2 lime
+  set couleur-label-minerai-3 brown
+  set couleur-obstacle grey
+  set couleur-marque green
+  set couleur-robot-vide red
+  set couleur-robot-plein couleur-minerai
+end
+
+to setup-turtles
+  crt population
+  [ set shape "robot"
+    set size 3                        ;; plus facile à voir
+	
+    ***A COMPLETER
+	
+    set color couleur-robot-vide  ]
+end
+
+to setup-patches
+  ask patches
+  [ setup-vaisseau
+    setup-minerai
+    setup-obstacles
+    recolor-patch ]
+end
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; initialisation des patchs - Patch procedures  ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+to setup-vaisseau
+  ;; initialisation de la variable vaisseau? pour les patchs vaisseau
+  set vaisseau? (distancexy 0 0) < 5
+  ;; diffusion du signal -- plus fort près du vaisseau
+  set signal 200 - distancexy 0 0
+end
+
+to setup-minerai
+  set minerai 0
+  ;; initialisation de la source 1 de minerai sur la droite, valeur 1 ou 2 aléatoire
+  if source-minerai-1
+  [set minerai one-of [1 2] ]
+  ;;initialisation de la source 2 de minerai en bas à gauche
+  if source-minerai-2
+  [ set minerai one-of [1 2] ]
+  ;; initialisation de la source 3 de minerai en haut à gauche
+  if source-minerai-3
+  [ set minerai one-of [1 2] ]
+end
+
+to setup-obstacles
+  ;; initialisation obstacle bas gauche
+  set obstacle? false
+  if ((distancexy (-0.3 * max-pxcor) (-0.3 * max-pycor)) < 3) or ((distancexy (-0.2 * max-pxcor) (-0.3 * max-pycor)) < 3) or ((distancexy (-0.4 * max-pxcor) (-0.3 * max-pycor)) < 3)
+  [ set obstacle? true
+    set signal signal * 0.8 ] ;; perte de 20 % du signal sur obstacle
+  ;;initialisation obstacle haut droit
+  if ((distancexy (-0.3 * max-pxcor) (0.5 * max-pycor)) < 3) or ((distancexy (-0.2 * max-pxcor) (0.6 * max-pycor)) < 3) or ((distancexy (-0.1 * max-pxcor) (0.7 * max-pycor)) < 3)
+  [ set obstacle? true
+    set signal signal * 0.8 ] ;; perte de 20 % du signal sur obstacle
+end
+
+to recolor-patch
+  ;; colorer les patchs
+  ifelse vaisseau?
+  [ set pcolor couleur-vaisseau]
+  [ifelse obstacle?
+    [set pcolor couleur-obstacle ]
+    [ifelse minerai > 0
+      [ set pcolor couleur-minerai ]
+      ;;dégradé de couleur de base pour représenter la concentration de marque
+      [ set pcolor scale-color couleur-marque marque 0.1 5 ] ]]
+
+end
+
+to-report source-minerai-1
+    if (pxcor = 0.6 * max-pxcor + 2) and (pycor = 0)
+    [set plabel-color couleur-label-minerai-1
+      set plabel "Source1"]
+    report (distancexy (0.6 * max-pxcor) 0) < 5
+end
+
+to-report source-minerai-2
+    if (pxcor = -0.6 * max-pxcor + 2) and (pycor = -0.6 * max-pycor)
+    [set plabel-color couleur-label-minerai-2
+      set plabel "Source2"]
+    report (distancexy (-0.6 * max-pxcor) (-0.6 * max-pycor)) < 5
+end
+
+to-report source-minerai-3
+    if (pxcor = -0.8 * max-pxcor + 2) and (pycor = 0.8 * max-pycor)
+    [set plabel-color couleur-label-minerai-3
+    set plabel "Source3"]
+  report (distancexy (-0.8 * max-pxcor) (0.8 * max-pycor)) < 5
+end
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Go procedures                                                                     ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+***A COMPLETER
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Subsomption - turtles procedures ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+***A COMPLETER
+
+;;; Règles de comportement
+;;; ----------------------
+
+***A COMPLETER
+
+;;; Percepts
+;;; --------
+
+***A COMPLETER
+
+;;; Actions
+;;; -------
+
+***A COMPLETER
+
+
+to uphill-marque
+;; tester patchs devant et sur les côtés pour s'orienter vers la concentration de marque la plus forte
+  let scent-ahead marque-at-angle   0                                                           ;; devant
+  let scent-right marque-at-angle  45                                                           ;; à droite 45
+  let scent-left marque-at-angle  -45                                                           ;; à gauche 45
+  if (scent-right > scent-ahead) or (scent-left > scent-ahead)
+  [ ifelse scent-right > scent-left
+    [ rt 45 ]
+    [ lt 45 ] ]
+   sens-suivi-marque
+end
+
+to uphill-signal
+;; tester patchs devant et sur les côtés pour s'orienter vers le signal le plus fort
+  let scent-ahead signal-at-angle   0                                                           ;; devant
+  let scent-right max (list (signal-at-angle  45) (signal-at-angle 60) (signal-at-angle 90))    ;; à droite 45, 60 et 90 degrés
+  let scent-left  max (list (signal-at-angle  -45) (signal-at-angle -60) (signal-at-angle -90)) ;; à gauche 45, 60 et 90 degrés
+  if (scent-right > scent-ahead) or (scent-left > scent-ahead)
+  [ ifelse scent-right > scent-left
+    [ rt 45 ]
+    [ lt 45 ] ]
+end
+
+to sens-suivi-marque
+;; détermine la direction de suivi d'une marque (vers la source de minerai)
+;; tester patchs devant et sur les côtés pour s'orienter vers le signal le moins fort
+  let scent-ahead signal-at-angle   0
+  if scent-ahead > signal
+  [
+  let scent-right signal-at-angle  45
+  let scent-left signal-at-angle  -45
+  ifelse scent-right > signal
+  [lt 45]
+  [rt 45]]
+end
+
+to-report signal-at-angle [angle]
+  let p patch-right-and-ahead angle 1
+  if p = nobody [ report 0 ]
+  report [signal] of p
+end
+
+
+to-report marque-at-angle [angle]
+  let p patch-right-and-ahead angle 1
+  if p = nobody [ report 0 ]
+  report [marque] of p
+end
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Plotting procedures                                                               ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+***A COMPLETER
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
