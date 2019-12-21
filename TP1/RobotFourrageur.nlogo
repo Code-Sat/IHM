@@ -18,7 +18,7 @@ globals [
 
 patches-own [
 
-;***A COMPLETER
+
 
 ]
 
