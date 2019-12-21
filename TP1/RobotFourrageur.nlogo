@@ -1,9 +1,3 @@
-﻿; exemple des robots fourrageurs
-; Copyright 2018 by Eric Gouardères
-
-; This model was inspired from Ants Model of Uri Wilensky
-; see the copyright notice below.
-
 globals [
 
   couleur-vaisseau         ;; couleur des patchs vaisseau
@@ -24,13 +18,13 @@ globals [
 
 patches-own [
 
-***A COMPLETER
+;***A COMPLETER
 
 ]
 
 turtles-own [
 
-***A COMPLETER
+;***A COMPLETER
 
 ]
 
@@ -62,7 +56,7 @@ to setup-turtles
   [ set shape "robot"
     set size 3                        ;; plus facile à voir
 	
-    ***A COMPLETER
+    ;***A COMPLETER
 	
     set color couleur-robot-vide  ]
 end
@@ -149,28 +143,28 @@ end
 ;;; Go procedures                                                                     ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-***A COMPLETER
+;***A COMPLETER
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Subsomption - turtles procedures ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-***A COMPLETER
+;***A COMPLETER
 
 ;;; Règles de comportement
 ;;; ----------------------
 
-***A COMPLETER
+;***A COMPLETER
 
 ;;; Percepts
 ;;; --------
 
-***A COMPLETER
+;***A COMPLETER
 
 ;;; Actions
 ;;; -------
 
-***A COMPLETER
+;***A COMPLETER
 
 
 to uphill-marque
@@ -225,8 +219,8 @@ end
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Plotting procedures                                                               ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-***A COMPLETER
+;
+;***A COMPLETER
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -254,6 +248,21 @@ GRAPHICS-WINDOW
 1
 ticks
 30.0
+
+SLIDER
+28
+44
+200
+77
+population
+population
+0
+200
+100.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
