@@ -223,9 +223,9 @@ end
 ;***A COMPLETER
 @#$#@#$#@
 GRAPHICS-WINDOW
-210
+344
 10
-647
+781
 448
 -1
 -1
@@ -250,10 +250,10 @@ ticks
 30.0
 
 SLIDER
-28
-44
-200
-77
+78
+12
+250
+45
 population
 population
 0
@@ -263,6 +263,110 @@ population
 1
 NIL
 HORIZONTAL
+
+BUTTON
+81
+59
+154
+92
+setup
+setup
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+168
+59
+231
+92
+NIL
+go
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+SWITCH
+89
+109
+244
+142
+coordination?
+coordination?
+1
+1
+-1000
+
+SLIDER
+70
+156
+242
+189
+taux-diffusion
+taux-diffusion
+0
+100
+50.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+69
+202
+248
+235
+taux-evaporation
+taux-evaporation
+0
+100
+10.0
+1
+1
+NIL
+HORIZONTAL
+
+PLOT
+63
+248
+263
+398
+quantité minerai par source
+NIL
+NIL
+0.0
+100.0
+0.0
+100.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count turtles"
+
+SWITCH
+79
+424
+182
+457
+trace?
+trace?
+1
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -305,29 +409,6 @@ default
 true
 0
 Polygon -7500403 true true 150 5 40 250 150 205 260 250
-
-robot
-true
-0
-Rectangle -16777216 true false 180 150 195 180
-Rectangle -16777216 true false 180 195 195 225
-Rectangle -16777216 true false 105 150 120 180
-Rectangle -16777216 true false 105 195 120 225
-Rectangle -7500403 true true 120 90 180 210
-Rectangle -7500403 true true 30 90 30 105
-Rectangle -7500403 true true 45 105 45 135
-Rectangle -16777216 true false 180 105 195 135
-Rectangle -16777216 true false 105 105 120 135
-Rectangle -7500403 false true 105 105 120 135
-Rectangle -7500403 false true 180 105 195 135
-Rectangle -7500403 false true 105 150 120 180
-Rectangle -7500403 false true 180 150 195 180
-Rectangle -7500403 false true 105 195 120 225
-Rectangle -7500403 false true 180 195 195 225
-Rectangle -16777216 true false 135 120 165 195
-Circle -7500403 true true 129 69 42
-Polygon -7500403 true true 135 60 120 90 165 60 180 90
-Circle -7500403 true true 135 195 30
 
 airplane
 true
@@ -515,6 +596,29 @@ Polygon -7500403 true true 165 180 165 210 225 180 255 120 210 135
 Polygon -7500403 true true 135 105 90 60 45 45 75 105 135 135
 Polygon -7500403 true true 165 105 165 135 225 105 255 45 210 60
 Polygon -7500403 true true 135 90 120 45 150 15 180 45 165 90
+
+robot
+true
+0
+Rectangle -16777216 true false 180 150 195 180
+Rectangle -16777216 true false 180 195 195 225
+Rectangle -16777216 true false 105 150 120 180
+Rectangle -16777216 true false 105 195 120 225
+Rectangle -7500403 true true 120 90 180 210
+Rectangle -7500403 true true 30 90 30 105
+Rectangle -7500403 true true 45 105 45 135
+Rectangle -16777216 true false 180 105 195 135
+Rectangle -16777216 true false 105 105 120 135
+Rectangle -7500403 false true 105 105 120 135
+Rectangle -7500403 false true 180 105 195 135
+Rectangle -7500403 false true 105 150 120 180
+Rectangle -7500403 false true 180 150 195 180
+Rectangle -7500403 false true 105 195 120 225
+Rectangle -7500403 false true 180 195 195 225
+Rectangle -16777216 true false 135 120 165 195
+Circle -7500403 true true 129 69 42
+Polygon -7500403 true true 135 60 120 90 165 60 180 90
+Circle -7500403 true true 135 195 30
 
 sheep
 false
