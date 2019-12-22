@@ -17,8 +17,14 @@ globals [
 
 
 patches-own [
-
-
+  vaisseau?        ;; true on vaisseau, false elsewhere
+  signal           ;; niveau de signal
+  minerai          ;;
+  obstacle?        ;; true if it's an obstacle?
+  marque           ;; idk
+  ;source-minerai-1 ;; number (1, 2, or 3) to identify the minerai sources
+  ;source-minerai-2 ;;
+  ;source-minerai-3 ;;
 
 ]
 
@@ -115,7 +121,6 @@ to recolor-patch
       [ set pcolor couleur-minerai ]
       ;;dégradé de couleur de base pour représenter la concentration de marque
       [ set pcolor scale-color couleur-marque marque 0.1 5 ] ]]
-
 end
 
 to-report source-minerai-1
@@ -224,12 +229,12 @@ end
 @#$#@#$#@
 GRAPHICS-WINDOW
 344
-10
-781
-448
+6
+840
+503
 -1
 -1
-13.0
+6.87324
 1
 10
 1
@@ -239,10 +244,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--16
-16
--16
-16
+-35
+35
+-35
+35
 0
 0
 1
