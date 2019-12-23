@@ -17,15 +17,11 @@ globals [
 
 
 patches-own [
-  vaisseau?        ;; true on vaisseau, false elsewhere
-  signal           ;; niveau de signal
-  minerai          ;;
-  obstacle?        ;; true if it's an obstacle?
-  marque           ;; idk
-  ;source-minerai-1 ;; number (1, 2, or 3) to identify the minerai sources
-  ;source-minerai-2 ;;
-  ;source-minerai-3 ;;
-
+  vaisseau?         ;; true on vaisseau, false elsewhere
+  signal            ;; niveau de signal
+  minerai           ;;
+  obstacle?         ;; true if it's an obstacle?
+  marque            ;; idk
 ]
 
 turtles-own [
@@ -43,6 +39,7 @@ to setup
   setup-colors
   setup-turtles
   setup-patches
+  reset-ticks
 end
 
 to setup-colors
@@ -61,7 +58,6 @@ to setup-turtles
   crt population
   [ set shape "robot"
     set size 3                        ;; plus facile à voir
-	
     ;***A COMPLETER
 	
     set color couleur-robot-vide  ]
@@ -148,8 +144,24 @@ end
 ;;; Go procedures                                                                     ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;***A COMPLETER
+to go
+  ask turtles
+  [if who >= ticks [stop] ;;delay initial departure
+    ;ifelse color = couleur-minerai
+    ;[]
+   ; []
+    move
+    fd 1]
+  tick
+end
 
+to move  ;; turtle procedure
+  if not can-move? 1 [ rt 180 ]
+  if obstacle? [rt 180]
+  if not obstacle?
+  [rt random 60
+   lt random 60]
+end
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Subsomption - turtles procedures ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -163,6 +175,7 @@ end
 
 ;;; Percepts
 ;;; --------
+
 
 ;***A COMPLETER
 
@@ -228,28 +241,28 @@ end
 ;***A COMPLETER
 @#$#@#$#@
 GRAPHICS-WINDOW
-344
-6
-840
-503
+278
+10
+929
+662
 -1
 -1
-6.87324
+9.06
 1
 10
 1
 1
 1
 0
-1
-1
+0
+0
 1
 -35
 35
 -35
 35
-0
-0
+1
+1
 1
 ticks
 30.0
@@ -263,7 +276,7 @@ population
 population
 0
 200
-100.0
+51.0
 1
 1
 NIL
