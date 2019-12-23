@@ -150,23 +150,24 @@ to go
     ;ifelse color = couleur-minerai
     ;[]
    ; []
+    Percept_obstacle
     move
     fd 1]
   tick
 end
 
-to move  ;; turtle procedure
-  if not can-move? 1 [ rt 180 ]
-  if obstacle? [rt 180]
-  if not obstacle?
-  [rt random 60
-   lt random 60]
-end
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Subsomption - turtles procedures ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;***A COMPLETER
+to move  ;; turtle procedure
+  if not obstacle? ;;pour que les robots ne rentrent pas dans les obstacles après avoir éviter
+  [rt random 60
+   lt random 60]
+  if not can-move? 1 [ rt 180 ]
+end
+
+
 
 ;;; Règles de comportement
 ;;; ----------------------
@@ -176,8 +177,9 @@ end
 ;;; Percepts
 ;;; --------
 
-
-;***A COMPLETER
+to Percept_obstacle
+  if obstacle? [rt 180]
+end
 
 ;;; Actions
 ;;; -------
