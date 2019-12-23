@@ -25,7 +25,7 @@ patches-own [
 ]
 
 turtles-own [
-
+ ; energie
 ;***A COMPLETER
 
 ]
@@ -51,7 +51,7 @@ to setup-colors
   set couleur-obstacle grey
   set couleur-marque green
   set couleur-robot-vide red
-  set couleur-robot-plein couleur-minerai
+  set couleur-robot-plein yellow
 end
 
 to setup-turtles
@@ -150,8 +150,9 @@ to go
     ;ifelse color = couleur-minerai
     ;[]
    ; []
+
     Percept_obstacle
-    move
+    Deplacement_aleatoire
     fd 1]
   tick
 end
@@ -160,33 +161,73 @@ end
 ;;; Subsomption - turtles procedures ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-to move  ;; turtle procedure
+;;; Règles de comportement
+;;; ----------------------
+
+to subsomption
+  ; let last-rule false
+  ; if not Eviter
+  ;  [if not Retourner
+  ;      [if not Deposer
+  ;         [if not Rapporter
+  ;            [if not Ramasser
+  ;               [if not SuivreMarques
+  ;                  [set last-rule Explorer]
+  ;                ]
+  ;             ]
+  ;          ]
+  ;       ]
+  ;   ]
+end
+
+;;; Percepts
+;;; --------
+
+to Percept_obstacle
+  if obstacle? [Changer_direction]
+end
+
+to Percept_dans_vaisseau
+  if vaisseau? [Deposer_echantillon]
+end
+
+to Percept_echantillon
+  ;;percoit un echantillon a 4 patch
+end
+
+to-report Percept_hors_vaisseau
+  report vaisseau?
+end
+
+;;; Actions
+;;; -------
+
+to Deplacement_aleatoire  ;; turtle procedure
   if not obstacle? ;;pour que les robots ne rentrent pas dans les obstacles après avoir éviter
   [rt random 60
    lt random 60]
   if not can-move? 1 [ rt 180 ]
 end
 
-
-
-;;; Règles de comportement
-;;; ----------------------
-
-;***A COMPLETER
-
-;;; Percepts
-;;; --------
-
-to Percept_obstacle
-  if obstacle? [rt 180]
+to Changer_direction
+  rt 180
 end
 
-;;; Actions
-;;; -------
+to Deposer_echantillon
+  rt 180
+end
 
-;***A COMPLETER
+to Aller_vers_signal
+end
 
+to Prendre_echantillon
+  ask patch-here [ if pcolor 45[
+  rt 180
+  set color couleur-robot-plein
+  ]]
+end
 
+;;-------- Partie non modifié ------------
 to uphill-marque
 ;; tester patchs devant et sur les côtés pour s'orienter vers la concentration de marque la plus forte
   let scent-ahead marque-at-angle   0                                                           ;; devant
@@ -237,7 +278,7 @@ to-report marque-at-angle [angle]
 end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Plotting procedures                                                               ;;;
+;;; Plotting procedures  procedure tracage                                                             ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 ;***A COMPLETER
@@ -245,11 +286,11 @@ end
 GRAPHICS-WINDOW
 278
 10
-929
-662
+783
+516
 -1
 -1
-9.06
+7.0
 1
 10
 1
@@ -278,7 +319,7 @@ population
 population
 0
 200
-51.0
+50.0
 1
 1
 NIL
