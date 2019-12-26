@@ -147,7 +147,7 @@ to go
   ask turtles
   [if who >= ticks [ stop ] ;;delay initial departure
     if Percept_obstacle [Changer_direction]
-    if Alerte_batterie? [Retourner]
+    ;;if Retourner
     Deplacement_aleatoire
     fd 1]
   tick
@@ -489,7 +489,7 @@ SWITCH
 523
 show-batterie?
 show-batterie?
-1
+0
 1
 -1000
 
