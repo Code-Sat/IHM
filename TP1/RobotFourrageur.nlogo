@@ -25,7 +25,7 @@ patches-own [
 ]
 
 turtles-own [
- ; energie
+ batterie
 ;***A COMPLETER
 
 ]
@@ -58,6 +58,7 @@ to setup-turtles
   crt population
   [ set shape "robot"
     set size 3                        ;; plus facile à voir
+    set batterie 100
     ;***A COMPLETER
 	
     set color couleur-robot-vide  ]
@@ -147,11 +148,7 @@ end
 to go
   ask turtles
   [if who >= ticks [stop] ;;delay initial departure
-    ;ifelse color = couleur-minerai
-    ;[]
-   ; []
-
-    Percept_obstacle
+    if Percept_obstacle [  if obstacle? [Changer_direction]]
     Deplacement_aleatoire
     fd 1]
   tick
@@ -180,23 +177,69 @@ to subsomption
   ;   ]
 end
 
+to-report Explorer
+  Deplacement_aleatoire
+  report true
+end
+
+to-report Retourner
+  ask turtles[
+  if Alerte_batterie? [Aller_vers_signal]
+  ]
+  report Alerte_batterie?
+end
+
+to-report Deposer
+  if Percept_dans_vaisseau and Porte_echantillon?
+  [Deposer_echantillon]
+  report Percept_dans_vaisseau and Porte_echantillon?
+end
+
+to-report Rapporter
+  if Percept_hors_vaisseau and Porte_echantillon?
+  [Aller_vers_signal]
+  report Percept_hors_vaisseau and Porte_echantillon?
+end
+
+to-report Ramasser
+  if Percept_echantillon and Percept_hors_vaisseau
+  [Prendre_echantillon]
+  report Percept_echantillon and Percept_hors_vaisseau
+end
+
+to-report SuivreMarques
+end
+
 ;;; Percepts
 ;;; --------
 
 to Percept_obstacle
-  if obstacle? [Changer_direction]
+  report obstacle?
 end
 
-to Percept_dans_vaisseau
+to-report Percept_dans_vaisseau
   if vaisseau? [Deposer_echantillon]
+  report vaisseau?
 end
 
-to Percept_echantillon
+to-report Percept_echantillon
   ;;percoit un echantillon a 4 patch
+  report false
 end
 
 to-report Percept_hors_vaisseau
   report vaisseau?
+end
+
+;; ETAT Robot -----------
+
+to-report Alerte_batterie?
+  if batterie < 7 [report true]
+  report false
+end
+
+to-report Porte_echantillon?
+  report false
 end
 
 ;;; Actions
@@ -207,6 +250,7 @@ to Deplacement_aleatoire  ;; turtle procedure
   [rt random 60
    lt random 60]
   if not can-move? 1 [ rt 180 ]
+  set batterie batterie - 1
 end
 
 to Changer_direction
@@ -221,13 +265,11 @@ to Aller_vers_signal
 end
 
 to Prendre_echantillon
-  ask patch-here [ if pcolor 45[
   rt 180
-  set color couleur-robot-plein
-  ]]
 end
 
 ;;-------- Partie non modifié ------------
+
 to uphill-marque
 ;; tester patchs devant et sur les côtés pour s'orienter vers la concentration de marque la plus forte
   let scent-ahead marque-at-angle   0                                                           ;; devant
