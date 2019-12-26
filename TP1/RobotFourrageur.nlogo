@@ -147,8 +147,10 @@ end
 
 to go
   ask turtles
-  [if who >= ticks [ stop ] ;;delay initial departure
+  [if who >= ticks [ stop ]                      ;;delay initial departure
     subsomption
+    if batterie < 90 [set Alerte_batterie? true] ;;Renvoi le robot a la base si batterie trop faible
+    if vaisseau? [set batterie 100 set Alerte_batterie false]              ;; remplit la batterie si dans le vaisseau
     fd 1]
   tick
   display-labels
@@ -164,9 +166,13 @@ end
 to subsomption
   let iv? false
   if not Eviter [
-    if not Ramasser[
-      if not Rapporter[
-      set iv? Explorer
+    if not Retourner[
+      if not Deposer[
+       if not Ramasser[
+         if not Rapporter[
+            set iv? Explorer
+          ]
+        ]
       ]
     ]
   ]
@@ -263,6 +269,9 @@ end
 
 to Deposer_echantillon
   rt 180
+  set color couleur-robot-vide
+  ;;set batterie 100
+  set Porte_echantillon? false
 end
 
 to Aller_vers_signal
@@ -342,13 +351,13 @@ to display-labels
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-135
+285
 10
 925
-801
+651
 -1
 -1
-11.0141
+8.90141
 1
 10
 1
