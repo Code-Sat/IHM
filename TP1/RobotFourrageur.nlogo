@@ -146,9 +146,7 @@ end
 to go
   ask turtles
   [if who >= ticks [ stop ] ;;delay initial departure
-    if Percept_obstacle [Changer_direction]
-    ;;if Retourner
-    Deplacement_aleatoire
+    subsomption
     fd 1]
   tick
   display-labels
@@ -161,8 +159,16 @@ end
 
 ;;; Règles de comportement
 ;;; ----------------------
-
 to subsomption
+  let iv? false
+  if not Eviter [
+    if not Ramasser[
+      set iv? Explorer
+    ]
+  ]
+end
+
+to subsomption1
    let last-rule false
    if not Eviter
     [if not Retourner
@@ -205,6 +211,7 @@ to-report Ramasser
   [Prendre_echantillon]
   report Percept_echantillon and Percept_hors_vaisseau
 end
+
 to-report Eviter
   if Percept_obstacle
   [Changer_direction]
@@ -225,13 +232,15 @@ to-report Percept_dans_vaisseau
   report vaisseau?
 end
 
-to-report Percept_echantillon
-  ;;percoit un echantillon a 4 patch
-  report false
+to-report Percept_hors_vaisseau
+  report not vaisseau?
 end
 
-to-report Percept_hors_vaisseau
-  report vaisseau?
+to-report Percept_echantillon
+  let echantillon? false
+  ;;percoit un echantillon a 4 patch
+  ask patch-here [if pcolor = yellow [set echantillon? true]]
+  report echantillon?
 end
 
 ;; ETAT Robot -----------
@@ -269,6 +278,7 @@ end
 
 to Prendre_echantillon
   rt 180
+  ask patch-here [set pcolor black]
 end
 
 ;;-------- Partie non modifié ------------
