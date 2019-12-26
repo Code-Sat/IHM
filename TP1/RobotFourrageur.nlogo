@@ -148,7 +148,7 @@ end
 to go
   ask turtles
   [if who >= ticks [stop] ;;delay initial departure
-    if Percept_obstacle [  if obstacle? [Changer_direction]]
+    if Percept_obstacle [Changer_direction]
     Deplacement_aleatoire
     fd 1]
   tick
@@ -213,7 +213,7 @@ end
 ;;; Percepts
 ;;; --------
 
-to Percept_obstacle
+to-report Percept_obstacle
   report obstacle?
 end
 
