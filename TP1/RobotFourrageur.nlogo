@@ -26,8 +26,8 @@ patches-own [
 
 turtles-own [
  batterie
-;***A COMPLETER
-
+ Alerte_batterie?    ;; si la batterie est a 7% true sinon false
+ Porte_echantillon?  ;;true s'il porte un échantillon
 ]
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -57,8 +57,10 @@ end
 to setup-turtles
   crt population
   [ set shape "robot"
-    set size 3                        ;; plus facile à voir
+    set size 3            ;; plus facile à voir
     set batterie 100	
+    set Porte_echantillon? false
+    set Alerte_batterie? false
     set color couleur-robot-vide  ]
 end
 
@@ -163,7 +165,9 @@ to subsomption
   let iv? false
   if not Eviter [
     if not Ramasser[
+      if not Rapporter[
       set iv? Explorer
+      ]
     ]
   ]
 end
@@ -238,20 +242,8 @@ end
 
 to-report Percept_echantillon
   let echantillon? false
-  ;;percoit un echantillon a 4 patch
   ask patch-here [if pcolor = yellow [set echantillon? true]]
   report echantillon?
-end
-
-;; ETAT Robot -----------
-
-to-report Alerte_batterie?
-  if batterie < 7 [report true]
-  report false
-end
-
-to-report Porte_echantillon?
-  report false
 end
 
 ;;; Actions
@@ -274,11 +266,14 @@ to Deposer_echantillon
 end
 
 to Aller_vers_signal
+  uphill-signal
 end
 
 to Prendre_echantillon
   rt 180
   ask patch-here [set pcolor black]
+  set Porte_echantillon? true
+  set color 45
 end
 
 ;;-------- Partie non modifié ------------
@@ -347,13 +342,13 @@ to display-labels
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-278
+135
 10
-783
-516
+925
+801
 -1
 -1
-7.0
+11.0141
 1
 10
 1
@@ -382,7 +377,7 @@ population
 population
 0
 200
-30.0
+10.0
 1
 1
 NIL
