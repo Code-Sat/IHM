@@ -58,9 +58,7 @@ to setup-turtles
   crt population
   [ set shape "robot"
     set size 3                        ;; plus facile à voir
-    set batterie 100
-    ;***A COMPLETER
-	
+    set batterie 100	
     set color couleur-robot-vide  ]
 end
 
@@ -147,11 +145,14 @@ end
 
 to go
   ask turtles
-  [if who >= ticks [stop] ;;delay initial departure
+  [if who >= ticks [ stop ] ;;delay initial departure
     if Percept_obstacle [Changer_direction]
+    if Alerte_batterie? [Retourner]
     Deplacement_aleatoire
     fd 1]
   tick
+  display-labels
+  ;do-plotting
 end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -162,19 +163,19 @@ end
 ;;; ----------------------
 
 to subsomption
-  ; let last-rule false
-  ; if not Eviter
-  ;  [if not Retourner
-  ;      [if not Deposer
-  ;         [if not Rapporter
-  ;            [if not Ramasser
-  ;               [if not SuivreMarques
-  ;                  [set last-rule Explorer]
-  ;                ]
-  ;             ]
-  ;          ]
-  ;       ]
-  ;   ]
+   let last-rule false
+   if not Eviter
+    [if not Retourner
+        [if not Deposer
+           [if not Rapporter
+              [if not Ramasser
+                 ;[if not SuivreMarques
+                    [set last-rule Explorer]
+                  ;]
+               ]
+            ]
+         ]
+     ]
 end
 
 to-report Explorer
@@ -183,9 +184,7 @@ to-report Explorer
 end
 
 to-report Retourner
-  ask turtles[
   if Alerte_batterie? [Aller_vers_signal]
-  ]
   report Alerte_batterie?
 end
 
@@ -206,6 +205,11 @@ to-report Ramasser
   [Prendre_echantillon]
   report Percept_echantillon and Percept_hors_vaisseau
 end
+to-report Eviter
+  if Percept_obstacle
+  [Changer_direction]
+  report Percept_obstacle
+end
 
 to-report SuivreMarques
 end
@@ -218,7 +222,6 @@ to-report Percept_obstacle
 end
 
 to-report Percept_dans_vaisseau
-  if vaisseau? [Deposer_echantillon]
   report vaisseau?
 end
 
@@ -250,7 +253,7 @@ to Deplacement_aleatoire  ;; turtle procedure
   [rt random 60
    lt random 60]
   if not can-move? 1 [ rt 180 ]
-  set batterie batterie - 1
+  set batterie batterie - 0.1
 end
 
 to Changer_direction
@@ -324,6 +327,14 @@ end
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 ;***A COMPLETER
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; BONUS option to check value or display                                                             ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+to display-labels
+  ask turtles [ifelse show-batterie? [set label round batterie] [set label ""]]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 278
@@ -361,7 +372,7 @@ population
 population
 0
 200
-50.0
+30.0
 1
 1
 NIL
@@ -467,6 +478,17 @@ SWITCH
 457
 trace?
 trace?
+1
+1
+-1000
+
+SWITCH
+90
+490
+253
+523
+show-batterie?
+show-batterie?
 1
 1
 -1000
