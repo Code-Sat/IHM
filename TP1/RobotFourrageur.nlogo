@@ -21,13 +21,13 @@ patches-own [
   signal            ;; niveau de signal
   minerai           ;;
   obstacle?         ;; true if it's an obstacle?
-  marque            ;; idk
+  marque            ;; quantité de marque sur ce patch
 ]
 
 turtles-own [
- batterie
- Alerte_batterie?    ;; si la batterie est a 7% true sinon false
- Porte_echantillon?  ;;true s'il porte un échantillon
+  batterie
+  Alerte_batterie?    ;; si la batterie est a 7% true sinon false
+  Porte_echantillon?  ;;true s'il porte un échantillon
 ]
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -153,8 +153,9 @@ to go
     if vaisseau? [set batterie 100 set Alerte_batterie? false]              ;; remplit la batterie si dans le vaisseau
     fd 1
     set batterie batterie - 0.1]
+  diffuse marque (taux-diffusion / 100)
   ask patches
-  [set marque marque * (100 - taux-evaporation) / 100  ;; slowly evaporate chemical
+  [ set marque marque * (100 - taux-evaporation) / 100  ;; slowly evaporate marque
     recolor-patch ]
   tick
   display-labels
@@ -174,7 +175,10 @@ to subsomption
       if not Deposer[
        if not Ramasser[
          if not Rapporter[
-            set lastrule? Explorer
+            if not SuivreMarques
+            [
+               set lastrule? Explorer
+            ]
           ]
         ]
       ]
@@ -202,12 +206,14 @@ end
 to-report Rapporter
   if Percept_hors_vaisseau and Porte_echantillon?
   [Aller_vers_signal]
+  if coordination? [Deposer_marque]
   report Percept_hors_vaisseau and Porte_echantillon?
 end
 
 to-report Ramasser
   if Percept_echantillon and Percept_hors_vaisseau
   [Prendre_echantillon]
+  if coordination? [Deposer_marque]
   report Percept_echantillon and Percept_hors_vaisseau
 end
 
@@ -218,6 +224,9 @@ to-report Eviter
 end
 
 to-report SuivreMarques
+  if Percept_marque and coordination?
+  [Aller_vers_marque]
+  report Percept_marque and coordination?
 end
 
 ;;; Percepts
@@ -239,6 +248,10 @@ to-report Percept_echantillon
   let echantillon? false
   ask patch-here [if pcolor = yellow [set echantillon? true]]
   report echantillon?
+end
+
+to-report Percept_marque
+  report coordination?
 end
 
 ;;; Actions
@@ -265,12 +278,6 @@ to Aller_vers_signal
   uphill-signal
 end
 
-to Prendre_echantillon1
-  rt 180
-  ask patch-here [set pcolor black]
-  set Porte_echantillon? true
-  set color 45
-end
 to Prendre_echantillon
   if minerai > 0
   [ set color yellow + 1     ;; pick up food
@@ -279,10 +286,14 @@ to Prendre_echantillon
     rt 180
     ;; and turn around
     stop ]
-  ;; go in the direction where the chemical smell is strongest
-  if trace? [
-  if (marque >= 0.05) and (marque < 2)
-    [ uphill-marque ]]
+end
+
+to Deposer_marque
+  set marque marque + 60  ;; drop some marque
+end
+
+to Aller_vers_marque
+  uphill-marque
 end
 ;;-------- Partie non modifié ------------
 
@@ -342,7 +353,7 @@ end
 ;***A COMPLETER
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; BONUS option to check value or display                                                             ;;;
+;;; BONUS option display                                                             ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 to display-labels
