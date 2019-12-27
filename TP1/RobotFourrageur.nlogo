@@ -149,9 +149,13 @@ to go
   ask turtles
   [if who >= ticks [ stop ]                      ;;delay initial departure
     subsomption
-    if batterie < 90 [set Alerte_batterie? true] ;;Renvoi le robot a la base si batterie trop faible
-    if vaisseau? [set batterie 100 set Alerte_batterie false]              ;; remplit la batterie si dans le vaisseau
-    fd 1]
+    if batterie < 7 [set Alerte_batterie? true] ;;Renvoi le robot a la base si batterie trop faible
+    if vaisseau? [set batterie 100 set Alerte_batterie? false]              ;; remplit la batterie si dans le vaisseau
+    fd 1
+    set batterie batterie - 0.1]
+  ask patches
+  [set marque marque * (100 - taux-evaporation) / 100  ;; slowly evaporate chemical
+    recolor-patch ]
   tick
   display-labels
   ;do-plotting
@@ -164,13 +168,13 @@ end
 ;;; Règles de comportement
 ;;; ----------------------
 to subsomption
-  let iv? false
+  let lastrule? false
   if not Eviter [
     if not Retourner[
       if not Deposer[
        if not Ramasser[
          if not Rapporter[
-            set iv? Explorer
+            set lastrule? Explorer
           ]
         ]
       ]
@@ -178,21 +182,6 @@ to subsomption
   ]
 end
 
-to subsomption1
-   let last-rule false
-   if not Eviter
-    [if not Retourner
-        [if not Deposer
-           [if not Rapporter
-              [if not Ramasser
-                 ;[if not SuivreMarques
-                    [set last-rule Explorer]
-                  ;]
-               ]
-            ]
-         ]
-     ]
-end
 
 to-report Explorer
   Deplacement_aleatoire
@@ -260,7 +249,6 @@ to Deplacement_aleatoire  ;; turtle procedure
   [rt random 60
    lt random 60]
   if not can-move? 1 [ rt 180 ]
-  set batterie batterie - 0.1
 end
 
 to Changer_direction
@@ -270,7 +258,6 @@ end
 to Deposer_echantillon
   rt 180
   set color couleur-robot-vide
-  ;;set batterie 100
   set Porte_echantillon? false
 end
 
@@ -278,13 +265,25 @@ to Aller_vers_signal
   uphill-signal
 end
 
-to Prendre_echantillon
+to Prendre_echantillon1
   rt 180
   ask patch-here [set pcolor black]
   set Porte_echantillon? true
   set color 45
 end
-
+to Prendre_echantillon
+  if minerai > 0
+  [ set color yellow + 1     ;; pick up food
+    set minerai minerai - 1        ;; and reduce the food source
+    set Porte_echantillon? true
+    rt 180
+    ;; and turn around
+    stop ]
+  ;; go in the direction where the chemical smell is strongest
+  if trace? [
+  if (marque >= 0.05) and (marque < 2)
+    [ uphill-marque ]]
+end
 ;;-------- Partie non modifié ------------
 
 to uphill-marque
@@ -497,10 +496,10 @@ trace?
 -1000
 
 SWITCH
-90
-490
-253
-523
+80
+477
+243
+510
 show-batterie?
 show-batterie?
 0
