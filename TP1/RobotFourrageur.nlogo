@@ -173,8 +173,8 @@ to subsomption
   if not Eviter [
     if not Retourner[
       if not Deposer[
-       if not Ramasser[
-         if not Rapporter[
+       if not Rapporter[
+         if not Ramasser[
             if not SuivreMarques
             [
                set lastrule? Explorer
@@ -205,15 +205,15 @@ end
 
 to-report Rapporter
   if Percept_hors_vaisseau and Porte_echantillon?
-  [Aller_vers_signal]
-  if coordination? [Deposer_marque]
+  [Aller_vers_signal
+    if coordination? [Deposer_marque]]
   report Percept_hors_vaisseau and Porte_echantillon?
 end
 
 to-report Ramasser
   if Percept_echantillon and Percept_hors_vaisseau
-  [Prendre_echantillon]
-  if coordination? [Deposer_marque]
+  [Prendre_echantillon
+    if coordination? [Deposer_marque]]
   report Percept_echantillon and Percept_hors_vaisseau
 end
 
@@ -443,7 +443,7 @@ SWITCH
 142
 coordination?
 coordination?
-1
+0
 1
 -1000
 
